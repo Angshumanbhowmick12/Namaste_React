@@ -3,12 +3,15 @@ import ShimmerUi from './ShimmerUi'
 import { useParams } from 'react-router-dom'
 
 import useRestroMenu from '../utils/useRestroMenu'
+import ResturantCategory from './ResturantCategory'
+import { useState } from 'react'
 
 const ResturantMenu = () => {
 
     // const [resDetail,setResDetail]=useState(null)
 
      const{restid}=useParams()
+     const [showIndex, setShowIndex] = useState(null)
 
     // useEffect(()=>{
     //     fetchData();
@@ -36,30 +39,35 @@ const ResturantMenu = () => {
 
     const {itemCards}=resDetail?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[4]?.card?.card
     
-
+    const categories=resDetail?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(c=> c.card?.card?.['@type']===
+"type.googleapis.com/swiggy.presentation.food.v2.ItemCategory" )
+    
+    console.log(categories);
+    
     
     
   return (
-    <div>
-        <div>
-            <h2>{name}</h2>
+    
+        <div className='text-center'>
+            <h2 className='font-bold my-6 text-2xl'>{name}</h2>
             <h3>{avgRating}⭐</h3>
             <p>{city}</p>
-            <p>{cuisines.join(',')}</p>
-            <h4>{costForTwoMessage}</h4>
-        </div>
-        <div>
-            <h2>Menu</h2>
+            <p className='font-bold text-lg'>{cuisines.join(',')} -{costForTwoMessage}</p>
             
+            {/* categories items */}
+
+            {categories.map((category,index)=>(
+                // controlled component
+                <ResturantCategory
+                 data={category?.card?.card}
+                 key={category?.card?.card}
+                 showItems={index === showIndex}
+                 setShowIndex={()=>setShowIndex(showIndex===index ? null :index)}
+                />
+            ))}
+        </div>
         
-            <ul >
-                
-                 {itemCards.map(item => <li key={item.card.info.id}>{item.card.info.name} -  Rs.{item.card.info.price / 100}</li> )}
-            
-                
-            </ul>
-        </div>
-    </div>
+
   )
 }
 

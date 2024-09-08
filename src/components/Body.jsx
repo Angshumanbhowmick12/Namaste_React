@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import RestroCard from './RestroCard.jsx'
+import RestroCard,{offersFood} from './RestroCard.jsx'
 
 import { useState } from 'react'
 import ShimmerUi from './ShimmerUi.jsx'
 import { Link } from 'react-router-dom'
 import useOnlineStatus from '../utils/useOnlineStatus.js'
+
 
 
 const Body=()=>{
@@ -15,6 +16,10 @@ const Body=()=>{
     const[filterlist,setFilterlist]=useState([])
 
     const onlineStatus=useOnlineStatus()
+
+    const ResturentOffer= offersFood(RestroCard)
+
+    console.log(res)
 
     useEffect(()=>{
         fetchData()
@@ -44,16 +49,16 @@ const Body=()=>{
     <ShimmerUi/>
     ) : (
         <div className="body">
-            <div className="filter">
-                <div className='search-box'>
+            <div className="flex">
+                <div className='m-4 p-4'>
                     <input type="text" 
-                    className='search'
+                    className='border border-solid border-black rounded-md'
                     value={searchText}
                     onChange={(e)=>{
                         setSearchText(e.target.value)
                     }}
                      />
-                    <button onClick={()=>{
+                    <button className='px-4 py-2 bg-green-100 m-4 rounded-lg shadow-lg' onClick={()=>{
                             const filterRes=res.filter((e)=>
                                 e.info.name.toLowerCase().includes(searchText.toLowerCase())
                             )
@@ -64,19 +69,24 @@ const Body=()=>{
                     </button>
                 </div>
 
-                <button className='filter-btn'
+                <div className='m-4 p-4 flex items-center'>
+                <button className='px-4 py-2 bg-orange-100 rounded-lg shadow-lg '
                     onClick={()=>{
                         const filterList=res.filter((e)=>e.info.avgRating >4.5)
                         setFilterlist(filterList)
                     }}
 
-                >Tap To Filter TOP Rated Resturant</button>
-        </div><div className ="res-container" >
+                >TOP Rated Resturant</button>
+                </div>
+        </div><div className ="flex flex-wrap" >
                     
                     {filterlist.map((rest) => (
                         <Link  to={'/resturant/' + rest.info.id} key={rest.info.id}>
-                            <RestroCard  resData={rest} />
+                            {/* {rest.info.aggregatedDiscountInfoV3.length=== 0  ? <RestroCard resData={rest}/> : <ResturentOffer resData={rest}/>} */}
+
+                            {<RestroCard resData={rest}/>}
                         </Link>
+
                     ))}
 
                     
