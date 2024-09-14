@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import RestroCard,{offersFood} from './RestroCard.jsx'
 
 import { useState } from 'react'
 import ShimmerUi from './ShimmerUi.jsx'
 import { Link } from 'react-router-dom'
 import useOnlineStatus from '../utils/useOnlineStatus.js'
+import UserContext from '../utils/UserContext.js'
 
 
 
@@ -18,6 +19,8 @@ const Body=()=>{
     const onlineStatus=useOnlineStatus()
 
     const ResturentOffer= offersFood(RestroCard)
+
+    const {loggedIn,setUsername}=useContext(UserContext)
 
     console.log(res)
 
@@ -77,6 +80,13 @@ const Body=()=>{
                     }}
 
                 >TOP Rated Resturant</button>
+                </div>
+                <div className='mt-12'>
+                  <label >UserName: </label>
+                 <input className='p-2 border border-black'
+                  value={loggedIn}
+                  onChange={(e)=> setUsername(e.target.value)}
+                 />
                 </div>
         </div><div className ="flex flex-wrap" >
                     
